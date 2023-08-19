@@ -40,7 +40,14 @@ def main():
     st.code(f"{title}", language="csv")
     st.markdown("- **Summary**")
     st.code(f"{summary}", language="csv")
-        
+    
+    
+    st.subheader("Text Translate")
+    st.markdown("- AI를 이용해 텍스트를 다른 언어로 번역합니다")
+    text = st.text_input('Input Text', "여기에 텍스트 입력", key="translate")
+    lang = st.radio(label="Language", options=["Korean", "English", "Japanese", "Chinese"])
+    translate = api.query_translate(text, lang)
+    st.code(f"{translate}", language="csv")
         
 if __name__ == '__main__':
     main()

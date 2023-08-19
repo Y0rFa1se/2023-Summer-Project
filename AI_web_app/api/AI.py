@@ -8,6 +8,19 @@ import openai
 openai.api_key = OPENAI_API_KEY
 ocr_secret = NCLOUD_OCR_API_KEY
 
+def translate(input_text, language):
+    prompt = f"""{input_text}
+    
+    Translate the above sentence to {language}"""
+    
+    chat_completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo", temperature=0,
+        messages=[{"role": "user", "content": prompt}], 
+        )
+
+    # return the chat completion
+    return chat_completion.choices[0].message.content
+
 def get_summarization_result(input_text):
     # add prompt to input
     prompt = f"""다음 OCR 결과에 적절한 제목을 붙이고 4줄 이내로 요약하세요.
@@ -62,6 +75,9 @@ class AIAPI(HaiAPI):
             self.font = ImageFont.truetype(font, size=20)
         else:
             self.font = ImageFont.load_default()
+            
+    def query_translate(self, input_text, language):
+        return translate(input_text, language)
 
     def query_image2text(self, file, **kwargs):
         """returns the information of the image as text"""
